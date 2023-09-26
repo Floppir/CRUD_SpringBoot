@@ -10,7 +10,7 @@ import web.model.User;
 import web.service.UserService;
 
 @Controller
-public class HelloController {
+public class UserController {
 
 	@Autowired
 	private UserService userService;
