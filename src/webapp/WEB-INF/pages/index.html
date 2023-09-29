@@ -63,7 +63,17 @@
         <h1 th:text="${user}"></h1>
         <div class="line"></div>
     </th:block>
-    <form class="form1" action="#" th:action="@{/sava_update_user}" th:object="${user}"
+    <form class="form1" action="#" th:action="@{/save_user}" th:object="${user}"
+          method="post" autocomplete="off">
+        <label>
+            <input type="text" placeholder="имя" th:field="*{name}"/>
+        </label>
+        <label>
+            <input type="text" placeholder="фамилия" th:field="*{lastName}"/>
+        </label>
+        <input class="input2" style="color:white;" type="submit" value="Создать"/>
+    </form>
+    <form class="form1" action="#" th:action="@{/update_user}" th:object="${user}"
           method="post" autocomplete="off">
         <label>
             id
@@ -75,7 +85,7 @@
         <label>
             <input type="text" placeholder="фамилия" th:field="*{lastName}"/>
         </label>
-        <input class="input2" style="color:white;" type="submit" value="Обновить/Создать(без id)"/>
+        <input class="input2" style="color:white;" type="submit" value="Обновить"/>
     </form>
     <form action="#" th:action="@{/delete-user}" th:object="${user}"
           method="post" autocomplete="off">
@@ -85,6 +95,7 @@
         </label>
         <input class="input2" style="color:white;" type="submit" value="Удалить"/>
     </form>
+    <p th:text="${message}">Default</p>
 </div>
 </body>
 </html>

@@ -10,7 +10,7 @@ public interface UserService {
 
     List<User> getAll();
 
-    void removeById (long id);
+    void removeById(long id);
 
-    void update (User user);
+    void update(User user);
 }

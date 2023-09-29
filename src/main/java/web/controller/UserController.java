@@ -12,29 +12,56 @@ import web.service.UserService;
 @Controller
 public class UserController {
 
-	@Autowired
-	private UserService userService;
+    private final UserService userService;
 
-	@GetMapping(value = "/")
-	public String index(ModelMap model) {
-		model.addAttribute("user", new User());
-		model.addAttribute(userService.getAll());
+    private String message;
 
-		return "index";
-	}
+    @Autowired
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
-	@PostMapping("/sava_update_user")
-	public String saveUpdateUser(@ModelAttribute User user) {
-		userService.update(user);
+    @GetMapping(value = "/")
+    public String index(ModelMap model, @ModelAttribute User user) {
+        model.addAttribute(userService.getAll());
+        model.addAttribute("message", message);
+        return "index";
+    }
 
-		return "redirect:/";
-	}
+    @PostMapping("/save_user")
+    public String saveUser(@ModelAttribute User user) {
+        try {
+            userService.add(user);
+            message = "Пользователь успешно добавлен";
+        } catch (RuntimeException e) {
+            message = e.getMessage();
+        }
 
-	@PostMapping("/delete-user")
-	public String deleteUser(@ModelAttribute User user) {
-		userService.removeById(user.getId());
+        return "redirect:/";
+    }
 
-		return "redirect:/";
-	}
-	
+    @PostMapping("/update_user")
+    public String updateUser(@ModelAttribute User user) {
+        try {
+            userService.update(user);
+            message = "Данные пользователя обновлены";
+        } catch (RuntimeException e) {
+            message = e.getMessage();
+        }
+
+        return "redirect:/";
+    }
+
+    @PostMapping("/delete-user")
+    public String deleteUser(@ModelAttribute User user) {
+        try {
+            userService.removeById(user.getId());
+            message = "Пользователь успешно удален";
+        } catch (RuntimeException e) {
+            message = e.getMessage();
+        }
+
+        return "redirect:/";
+    }
+
 }

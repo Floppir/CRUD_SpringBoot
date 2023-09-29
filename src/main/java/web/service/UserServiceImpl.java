@@ -11,8 +11,12 @@ import java.util.List;
 @Service
 public class UserServiceImpl implements UserService {
 
+    private final UserDao userDao;
+
     @Autowired
-    private UserDao userDao;
+    public UserServiceImpl(UserDao userDao) {
+        this.userDao = userDao;
+    }
 
     @Transactional
     @Override
@@ -20,7 +24,6 @@ public class UserServiceImpl implements UserService {
         userDao.add(user);
     }
 
-    @Transactional
     @Override
     public List<User> getAll() {
         return userDao.getAll();
@@ -29,7 +32,11 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public void removeById(long id) {
-        userDao.removeById(id);
+        try {
+            userDao.removeById(id);
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException("Пользователь с данным id не найден");
+        }
     }
 
     @Transactional

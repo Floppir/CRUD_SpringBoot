@@ -11,12 +11,20 @@ import java.util.List;
 @Repository
 public class UserDaoImpl implements UserDao {
 
+    private final EntityManager em;
+
     @Autowired
-    EntityManager em;
+    public UserDaoImpl(EntityManager em) {
+        this.em = em;
+    }
 
     @Override
     public void add(User user) {
-        em.persist(user);
+        if (!user.getName().isEmpty() && !user.getLastName().isEmpty()) {
+            em.persist(user);
+        } else {
+            throw new RuntimeException("Поля создания пользователя не могут быть пустыми");
+        }
     }
 
     @Override
@@ -35,6 +43,14 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public void update(User user) {
-        em.merge(user);
+        if (em.find(User.class, user.getId()) != null) {
+            if (!user.getName().isEmpty() && !user.getLastName().isEmpty()) {
+                em.merge(user);
+            } else {
+                throw new RuntimeException("Поля пользователя не могут быть пустыми");
+            }
+        } else {
+            throw new RuntimeException("Пользователя с таким id не существует");
+        }
     }
 }
